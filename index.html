@@ -149,6 +149,35 @@ textarea{min-height:120px;resize:vertical}
   .footer{flex-direction:column;align-items:flex-start}
 }
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+
+/* Interactive messenger demonstration */
+.demo-shell{display:grid;grid-template-columns:.76fr 1.24fr;gap:24px;align-items:center}
+.demo-copy h2{font-size:clamp(36px,4vw,57px);line-height:1.08;letter-spacing:-.055em;margin:14px 0 22px}
+.demo-copy p{color:#afbed0;line-height:1.85;font-size:15px}
+.demo-pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:24px}
+.demo-pills button{border:1px solid #ffffff28;border-radius:99px;padding:10px 13px;background:#ffffff08;color:#e4f4ff;font-size:12px;font-weight:700}
+.demo-pills button[aria-pressed=true]{background:#a5f6d6;color:#08131a;border-color:#a5f6d6}
+.messenger{max-width:640px;width:100%;margin:auto;background:#101d2b;border:1px solid #54788a66;border-radius:24px;overflow:hidden;box-shadow:0 30px 110px #0009}
+.msg-head{display:flex;align-items:center;gap:13px;padding:16px 20px;background:#182c3d;border-bottom:1px solid #ffffff1d}
+.msg-avatar{width:43px;height:43px;border-radius:50%;background:linear-gradient(135deg,#99f8cf,#63baff);display:grid;place-items:center;font-weight:950;color:#08202c}
+.msg-head b{font-size:14px;display:block}.msg-head small{display:block;color:#a3c2d0;margin-top:4px;font-size:11px}
+.msg-head .online{width:8px;height:8px;border-radius:50%;background:#94ffb8;margin-left:auto;box-shadow:0 0 12px #94ffb8}
+.msg-stream{height:410px;overflow:auto;padding:20px;display:flex;flex-direction:column;gap:12px;background:radial-gradient(circle at 80% 20%,#22435770,transparent 55%),#0c1927;scrollbar-width:thin}
+.bubble{max-width:87%;padding:13px 16px;border-radius:16px;font-size:13px;line-height:1.65;white-space:pre-line;animation:msgIn .28s ease-out}
+.bubble.user{align-self:flex-end;background:#235e59;border-bottom-right-radius:4px}
+.bubble.agent{align-self:flex-start;background:#253a4c;border-bottom-left-radius:4px}
+.bubble.result{border:1px solid #7fe9ba70;background:#153b36;box-shadow:0 0 28px #4aeeaf17}
+.bubble small{display:block;margin-top:8px;color:#bbd6d9;font-size:10px}
+@keyframes msgIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.typing{display:flex;align-items:center;gap:6px;padding:14px 18px;background:#253a4c;border-radius:16px;align-self:flex-start}
+.typing i{display:block;width:6px;height:6px;background:#b1d4df;border-radius:50%;animation:dot 1s infinite alternate}
+.typing i:nth-child(2){animation-delay:.2s}.typing i:nth-child(3){animation-delay:.4s}
+@keyframes dot{to{opacity:.3;transform:translateY(-5px)}}
+.msg-bottom{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:14px 20px;border-top:1px solid #ffffff1b;background:#142535}
+.msg-bottom span{font-size:11px;color:#a5b6c7;line-height:1.5}.msg-bottom button{border:0;border-radius:10px;padding:11px 15px;background:#a5f6d6;color:#092019;font-size:12px;font-weight:800;white-space:nowrap}
+.demo-caution{font-size:12px!important;color:#8ea5b8!important}
+@media(max-width:940px){.demo-shell{grid-template-columns:1fr}.messenger{max-width:650px}}
+@media(max-width:600px){.msg-stream{height:400px}.msg-bottom{align-items:start;flex-direction:column}.bubble{max-width:95%}}
 </style>
 </head>
 <body>
@@ -219,7 +248,29 @@ textarea{min-height:120px;resize:vertical}
     </div>
   </section>
 
-  <section class="section" id="tool-world">
+  
+<section class="section" id="live-demo">
+ <div class="wrap demo-shell">
+  <div class="demo-copy">
+   <div class="eyebrow"><span class="pulse"></span><span id="demoEyebrow">SEE THE AGENT IN ACTION</span></div>
+   <h2 id="demoTitle">One message.<br><span class="accent">Work gets done.</span></h2>
+   <p id="demoDescription">Select a real-world routine. Watch a messenger-style walkthrough: request → understanding → actions → checked outcome.</p>
+   <div class="demo-pills" id="demoCases" role="group" aria-label="Demo scenarios">
+    <button type="button" data-demo="0" aria-pressed="true">📨 Inbox</button>
+    <button type="button" data-demo="1" aria-pressed="false">📄 Invoice</button>
+    <button type="button" data-demo="2" aria-pressed="false">📅 Meetings</button>
+   </div>
+   <p class="demo-caution" id="demoDisclaimer">Interactive simulation with example data. No real messages, tasks or payments are sent.</p>
+  </div>
+  <div class="messenger" aria-label="Illustrative autonomous agent messenger conversation">
+   <div class="msg-head"><div class="msg-avatar">✳</div><div><b>AUTONOMOUS / AGENT</b><small id="demoPresence">Demo environment · online</small></div><span class="online"></span></div>
+   <div class="msg-stream" id="demoStream" aria-live="polite" aria-relevant="additions"></div>
+   <div class="msg-bottom"><span id="demoStatus">Ready to run a simulated workflow</span><button type="button" id="demoReplay">▶ Run demo</button></div>
+  </div>
+ </div>
+</section>
+
+<section class="section" id="tool-world">
     <div class="wrap">
       <div class="section-head">
         <div>
@@ -685,6 +736,7 @@ function applyLanguage(lang){
   renderStories();
   syncTopic();
   updateEstimate();
+  demoRender();
   try{localStorage.setItem('site-language',lang)}catch(e){}
 }
 
@@ -706,6 +758,35 @@ ui.form.addEventListener('submit',e=>{
   const body = `${labels.from}: ${email}\n${labels.topic}: ${ui.topic.value}\n\n${labels.message}:\n${message}`;
   window.location.href = 'mailto:waterhub.cloud@gmail.com?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
 });
+
+const demoI18n={
+en:{eyebrow:"SEE THE AGENT IN ACTION",title:'One message.<br><span class="accent">Work gets done.</span>',description:"Choose a familiar routine. Watch the agent interpret a request, prepare actions and show a verified demo result.",disclaimer:"Interactive simulation using fictional data. Nothing is connected to your accounts; no real tasks, messages or payments are sent.",presence:"Demo environment · online",status:"Ready to simulate",running:"Agent is processing the example…",done:"✓ Demo completed · all example steps verified",play:"▶ Run demo",replay:"↻ Replay",labels:["📨 Inbox","📄 Invoice","📅 Meetings"],who:"YOU",agent:"AGENT",doneLabel:"✓ COMPLETED IN DEMO",scenarios:[
+["Read today's client emails. Find what I promised, assign owners and follow up.","Checking 8 sample emails…","Found 3 commitments and 2 missing deadlines.","Preparing tasks, owners and follow-up drafts…","✓ Demo tasks prepared: 3\n✓ Follow-up drafts: 2\n✓ Overdue reminder: 1\nEverything is organized in the example task board."],
+["Check this supplier invoice against purchase order 1042. Tell me what is wrong.","Extracting example invoice lines…","Comparing 12 line items with the sample order…","Found one duplicate charge. Preparing an approval note…","✓ 12 lines checked\n✓ Duplicate charge flagged: €84\n✓ Clarification email drafted\nPayment held for human approval (demo)."],
+["Summarize the team meeting and make sure we do not miss deadlines.","Reading example meeting notes…","Extracting decisions, owners and dates…","Preparing the action list and reminder schedule…","✓ 4 action items prepared\n✓ 3 owners assigned\n✓ 2 reminders scheduled in demo\nSample completion checklist is ready."]
+]},
+ru:{eyebrow:"ПОСМОТРИТЕ, КАК РАБОТАЕТ АГЕНТ",title:'Одно сообщение.<br><span class="accent">И задача решена.</span>',description:"Выберите знакомую рутину и посмотрите, как агент понимает задачу, выполняет шаги и показывает проверенный результат.",disclaimer:"Интерактивная симуляция с вымышленными данными. Реальные письма, задачи и платежи не отправляются.",presence:"Демо-среда · онлайн",status:"Готов к демонстрации",running:"Агент обрабатывает пример…",done:"✓ Демо завершено · шаги проверены",play:"▶ Запустить",replay:"↻ Повторить",labels:["📨 Почта","📄 Счёт","📅 Встреча"],who:"ВЫ",agent:"АГЕНТ",doneLabel:"✓ ГОТОВО В ДЕМО",scenarios:[
+["Разбери сегодняшние письма клиентов. Найди мои обещания, ответственных и подготовь follow-up.","Проверяю 8 демонстрационных писем…","Нашёл 3 обязательства и 2 срока, требующих уточнения.","Готовлю задачи, ответственных и черновики ответов…","✓ Задачи подготовлены: 3\n✓ Черновики follow-up: 2\n✓ Напоминание о просрочке: 1\nВ демонстрационной доске всё организовано."],
+["Сверь счёт поставщика с заказом №1042. Покажи ошибки.","Извлекаю позиции из демонстрационного счёта…","Сверяю 12 позиций с заказом…","Нашёл повторное начисление. Готовлю запрос на уточнение…","✓ Проверено 12 позиций\n✓ Обнаружен дубль: €84\n✓ Письмо поставщику подготовлено\nПлатёж оставлен на подтверждение человеку (демо)."],
+["Разбери протокол встречи и проследи, чтобы мы не забыли сроки.","Читаю демонстрационные заметки встречи…","Выделяю решения, ответственных и даты…","Готовлю задачи и расписание напоминаний…","✓ Подготовлено 4 задачи\n✓ Назначены 3 ответственных\n✓ В демо запланированы 2 напоминания\nКонтрольный список готов."]
+]},
+uk:{eyebrow:"ПОДИВІТЬСЯ, ЯК ПРАЦЮЄ АГЕНТ",title:'Одне повідомлення.<br><span class="accent">І завдання вирішено.</span>',description:"Оберіть знайому рутину й подивіться, як агент розуміє завдання, виконує кроки та показує перевірений результат.",disclaimer:"Інтерактивна симуляція з вигаданими даними. Реальні листи, завдання й платежі не надсилаються.",presence:"Демо-середовище · онлайн",status:"Готовий до демонстрації",running:"Агент обробляє приклад…",done:"✓ Демо завершено · кроки перевірені",play:"▶ Запустити",replay:"↻ Повторити",labels:["📨 Пошта","📄 Рахунок","📅 Зустріч"],who:"ВИ",agent:"АГЕНТ",doneLabel:"✓ ГОТОВО В ДЕМО",scenarios:[
+["Розбери сьогоднішні листи клієнтів. Знайди мої обіцянки, відповідальних і підготуй follow-up.","Перевіряю 8 демонстраційних листів…","Знайшов 3 зобов’язання і 2 терміни, які слід уточнити.","Готую завдання, відповідальних і чернетки відповідей…","✓ Підготовлено 3 завдання\n✓ Чернетки follow-up: 2\n✓ Нагадування про прострочення: 1\nУ демонстраційній дошці все впорядковано."],
+["Звір рахунок постачальника із замовленням №1042. Покажи помилки.","Витягую позиції з демонстраційного рахунку…","Звіряю 12 позицій із замовленням…","Знайшов повторне нарахування. Готую запит на уточнення…","✓ Перевірено 12 позицій\n✓ Виявлено дубль: €84\n✓ Лист постачальнику підготовлено\nПлатіж лишається на підтвердження людиною (демо)."],
+["Розбери протокол зустрічі й простеж, щоб ми не забули терміни.","Читаю демонстраційні нотатки зустрічі…","Виділяю рішення, відповідальних і дати…","Готую завдання й розклад нагадувань…","✓ Підготовлено 4 завдання\n✓ Призначено 3 відповідальних\n✓ У демо заплановано 2 нагадування\nКонтрольний список готовий."]
+]}
+};
+let demoScenario=0,demoToken=0,demoTimers=[];
+const demoStream=document.getElementById("demoStream"),demoStatus=document.getElementById("demoStatus"),demoReplay=document.getElementById("demoReplay");
+function demoCopy(){return demoI18n[currentLang]||demoI18n.en}
+function demoReset(){demoToken++;demoTimers.forEach(clearTimeout);demoTimers=[];demoStream.replaceChildren();const d=demoCopy();demoStatus.textContent=d.status;demoReplay.disabled=false;demoReplay.textContent=d.play}
+function demoBubble(message,user=false,result=false){const d=demoCopy();const b=document.createElement("div");b.className="bubble "+(user?"user":result?"agent result":"agent");const content=document.createElement("span");content.textContent=message;b.appendChild(content);const caption=document.createElement("small");caption.textContent=result?d.doneLabel:(user?d.who:d.agent);b.appendChild(caption);demoStream.appendChild(b);demoStream.scrollTop=demoStream.scrollHeight}
+function demoTyping(){const b=document.createElement("div");b.className="typing";b.setAttribute("aria-label","Typing");b.innerHTML="<i></i><i></i><i></i>";demoStream.appendChild(b);demoStream.scrollTop=demoStream.scrollHeight;return b}
+function demoRun(){demoReset();const d=demoCopy(),steps=d.scenarios[demoScenario];demoReplay.disabled=true;demoStatus.textContent=d.running;demoBubble(steps[0],true);let time=400;for(let i=1;i<steps.length;i++){const delay=time;demoTimers.push(setTimeout(()=>{const indicator=demoTyping();demoTimers.push(setTimeout(()=>{indicator.remove();demoBubble(steps[i],false,i===steps.length-1);if(i===steps.length-1){demoStatus.textContent=d.done;demoReplay.disabled=false;demoReplay.textContent=d.replay}},850))},delay));time+=1500}}
+function demoRender(){const d=demoCopy();document.getElementById("demoEyebrow").textContent=d.eyebrow;document.getElementById("demoTitle").innerHTML=d.title;document.getElementById("demoDescription").textContent=d.description;document.getElementById("demoDisclaimer").textContent=d.disclaimer;document.getElementById("demoPresence").textContent=d.presence;document.querySelectorAll("#demoCases button").forEach((b,i)=>{b.textContent=d.labels[i];b.setAttribute("aria-pressed",String(i===demoScenario))});demoReset();demoBubble(d.scenarios[demoScenario][0],true)}
+document.querySelectorAll("#demoCases button").forEach(b=>b.addEventListener("click",()=>{demoScenario=Number(b.dataset.demo);demoRender();demoRun()}));
+demoReplay.addEventListener("click",demoRun);
+
 ui.year.textContent = new Date().getFullYear();
 applyLanguage(detectLang());
 </script>
