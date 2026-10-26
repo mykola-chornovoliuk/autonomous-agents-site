@@ -200,7 +200,7 @@ textarea{min-height:120px;resize:vertical}
 .tg-send:disabled{opacity:.5;cursor:wait}
 .tg-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;background:#17212b;padding:4px 14px 10px;font-size:11px;color:#9eb1c3}
 .tg-foot button{border:1px solid #ffffff25;background:transparent;border-radius:8px;color:#bce8ff;padding:4px 10px}
-</style>
+.stack-heading{font-size:clamp(34px,4.2vw,58px);line-height:1.1;letter-spacing:-.05em;margin:14px 0}.stack-intro{color:#aec0d0;max-width:780px;line-height:1.8;margin-bottom:26px}.stack-layout{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}.stack-services,.stack-insights{padding:24px}.stack-services{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.stack-service{display:flex;align-items:center;gap:10px;min-width:0;border:1px solid #ffffff23;background:#ffffff08;border-radius:13px;padding:12px 10px;color:#e7f2f8;font-weight:700;font-size:12px;transition:background .2s,border-color .2s}.stack-service span:last-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.stack-service[aria-pressed=true]{background:#9ff5d61c;border-color:#9ff5d6;box-shadow:inset 0 0 0 1px #9ff5d655}.stack-service:focus-visible{outline:2px solid #a5f6d6}.stack-service .icon-holder{width:22px;height:22px}.stack-insight-head{display:flex;justify-content:space-between;gap:12px;align-items:center;font-size:16px;font-weight:850}.stack-insight-head button{background:none;border:0;color:#9ff5d6;font-weight:750}.stack-insights>p{color:#a8b9c9;line-height:1.65;font-size:13px}.stack-matches{display:grid;gap:10px;margin:18px 0}.stack-match{padding:15px;border-radius:13px;background:#ffffff08;border:1px solid #ffffff18;text-align:left;color:#eef7ff}.stack-match b{display:block;font-size:14px;margin-bottom:6px}.stack-match span{display:block;font-size:12px;color:#a9c2d2;line-height:1.5}.stack-match.active{border-color:#8fe6c6;background:#8fe6c614}.stack-matches .stack-match{cursor:pointer}.stack-insights .button{width:100%;margin-top:10px}.stack-insights .demo-caution{font-size:11px!important;margin-bottom:0}@media(max-width:950px){.stack-layout{grid-template-columns:1fr}}@media(max-width:570px){.stack-services{grid-template-columns:repeat(2,minmax(0,1fr));padding:14px}.stack-services,.stack-insights{padding:16px}.stack-service{padding:10px 8px;font-size:11px}}</style>
 </head>
 <body>
 <header class="topbar">
@@ -271,6 +271,13 @@ textarea{min-height:120px;resize:vertical}
   </section>
 
   
+<section class="section" id="my-stack"><div class="wrap">
+ <div class="eyebrow"><span class="pulse"></span><span data-stack="kicker">YOUR DIGITAL WORLD</span></div>
+ <h2 class="stack-heading" data-stack="title">Which apps do you use <span class="accent">every day?</span></h2>
+ <p class="stack-intro" data-stack="intro">Pick at least two. We'll highlight routine handoffs where an autonomous agent could help. Nothing is connected to your accounts.</p>
+ <div class="stack-layout"><div class="glass stack-services" id="stackServices" aria-label="Choose your services"></div>
+ <div class="glass stack-insights"><div class="stack-insight-head"><span data-stack="insightTitle">Your opportunity map</span><button id="stackClear" type="button" data-stack="clear">Reset</button></div><p id="stackSummary"></p><div id="stackMatches" class="stack-matches" aria-live="polite"></div><a class="button primary" id="stackAction" href="#live-demo" data-stack="action">Watch your agent handle this ↗</a><p class="demo-caution" data-stack="note">Suggested workflows, not verified integrations. No account access is requested.</p></div></div>
+</div></section>
 <section class="section" id="live-demo">
  <div class="wrap demo-shell">
   <div class="demo-copy">
@@ -771,6 +778,7 @@ function applyLanguage(lang){
   syncTopic();
   updateEstimate();
   demoRender();
+  stackRender();
   try{localStorage.setItem('site-language',lang)}catch(e){}
 }
 
@@ -821,6 +829,36 @@ function demoRun(){demoStop();const d=demoCopy(),steps=d.scenarios[demoScenario]
 function demoRender(){const d=demoCopy();document.getElementById("demoEyebrow").textContent=d.eyebrow;document.getElementById("demoTitle").innerHTML=d.title;document.getElementById("demoDescription").textContent=d.description;document.getElementById("demoDisclaimer").textContent=d.disclaimer;document.getElementById("demoPresence").textContent=d.presence;document.getElementById("demoInputHint").textContent=currentLang==="ru"?"Сообщение":currentLang==="uk"?"Повідомлення":"Message";document.querySelectorAll("#demoCases button").forEach((b,i)=>{b.textContent=d.labels[i];b.setAttribute("aria-pressed",String(i===demoScenario))});demoStop();demoBubble(d.scenarios[demoScenario][0],true)}
 document.querySelectorAll("#demoCases button").forEach(b=>b.addEventListener("click",()=>{demoScenario=Number(b.dataset.demo);demoRun()}));
 demoReplay.addEventListener("click",demoRun);demoNext.addEventListener("click",()=>{demoScenario=(demoScenario+1)%3;demoRender();demoRun()});
+
+
+const stackCopy={
+ en:{kicker:"YOUR DIGITAL WORLD",title:'Which apps do you use <span class="accent">every day?</span>',intro:"Pick the services you recognize. We'll show likely handoffs and the routine an agent could handle. Nothing is connected to your accounts.",insightTitle:"Your opportunity map",clear:"Reset",action:"Watch your agent handle this ↗",note:"Potential workflows only, not claims of existing integrations. No account access is requested.",empty:"Choose two or more services to reveal cross-app opportunities.",single:"Add another service to discover handoffs between apps.",multi:"Selected: {n} services. Click a workflow to preview the matching agent scenario.",matches:"Your selected services"},
+ uk:{kicker:"ВАШ ЦИФРОВИЙ СВІТ",title:'Якими застосунками ви користуєтесь <span class="accent">щодня?</span>',intro:"Оберіть знайомі сервіси. Ми покажемо можливі переходи між ними та рутину, яку може виконати агент. Жодних підключень до акаунтів.",insightTitle:"Ваша карта можливостей",clear:"Скинути",action:"Подивитися роботу агента ↗",note:"Це можливі сценарії, а не підтверджені інтеграції. Доступ до акаунтів не потрібен.",empty:"Оберіть щонайменше два сервіси, щоб побачити можливості між ними.",single:"Додайте ще один сервіс, щоб знайти рутину між застосунками.",multi:"Обрано сервісів: {n}. Натисніть сценарій, щоб побачити демонстрацію агента.",matches:"Обрані сервіси"},
+ ru:{kicker:"ВАШ ЦИФРОВОЙ МИР",title:'Какими приложениями вы пользуетесь <span class="accent">каждый день?</span>',intro:"Выберите знакомые сервисы. Мы покажем возможные переходы между ними и рутину, которую может выполнять агент. Никаких подключений к аккаунтам.",insightTitle:"Ваша карта возможностей",clear:"Сбросить",action:"Посмотреть работу агента ↗",note:"Это возможные сценарии, а не подтверждённые интеграции. Доступ к аккаунтам не требуется.",empty:"Выберите минимум два сервиса, чтобы увидеть возможности между ними.",single:"Добавьте ещё один сервис, чтобы найти рутину между приложениями.",multi:"Выбрано сервисов: {n}. Нажмите на сценарий, чтобы увидеть демонстрацию агента.",matches:"Выбранные сервисы"}
+};
+const stackOptions=[["Gmail","gmail","EA4335"],["Telegram","telegram","26A5E4"],["Slack","slack","4A154B"],["Outlook","microsoftoutlook","0078D4"],["Calendar","googlecalendar","4285F4"],["Drive","googledrive","34A853"],["Docs","googledocs","4285F4"],["Excel","microsoftexcel","217346"],["Notion","notion","ffffff"],["Trello","trello","0052CC"],["Jira","jira","0052CC"],["HubSpot","hubspot","FF7A59"],["Stripe","stripe","635BFF"],["Airtable","airtable","18BFFF"],["WhatsApp","whatsapp","25D366"]];
+const stackSet=new Set();let stackPicked=0;
+const stackText=(id,v,html=false)=>{const node=document.querySelector('[data-stack="'+id+'"]');if(node)html?node.innerHTML=v:node.textContent=v};
+function stackRender(){
+ const lang=stackCopy[currentLang]||stackCopy.en;for(const k of ["kicker","intro","insightTitle","clear","action","note"])stackText(k,lang[k]);stackText("title",lang.title,true);
+ const host=document.getElementById("stackServices");
+ host.innerHTML=stackOptions.map(([name,slug,color])=>'<button type="button" class="stack-service" aria-pressed="'+stackSet.has(slug)+'" data-stack-service="'+slug+'">'+serviceImg(slug,name,color)+'<span>'+name+'</span></button>').join("");
+ host.querySelectorAll("[data-stack-service]").forEach(b=>b.addEventListener("click",()=>{const k=b.dataset.stackService;stackSet.has(k)?stackSet.delete(k):stackSet.add(k);stackResults()}));
+ stackResults();
+}
+function stackResults(){
+ const selected=stackOptions.filter(s=>stackSet.has(s[1]));const lang=stackCopy[currentLang]||stackCopy.en;
+ document.querySelectorAll("[data-stack-service]").forEach(b=>b.setAttribute("aria-pressed",String(stackSet.has(b.dataset.stackService))));
+ document.getElementById("stackSummary").textContent=selected.length<2?(selected.length?lang.single:lang.empty):lang.multi.replace("{n}",selected.length);
+ const result=document.getElementById("stackMatches");result.replaceChildren();
+ if(selected.length<2)return;
+ const selectedSlugs=new Set(selected.map(x=>x[1]));
+ const ranked=cases.map((c,i)=>({c,i,score:c.services.filter(k=>selectedSlugs.has(k)).length})).filter(x=>x.score>0).sort((a,b)=>b.score-a.score||a.i-b.i).slice(0,4);
+ for(const {c,i,score} of ranked){const btn=document.createElement("button");btn.type="button";btn.className="stack-match"+(i===stackPicked?" active":"");const title=document.createElement("b");title.textContent=c.titles[currentLang];const info=document.createElement("span");info.textContent=c.teasers[currentLang]+" · "+score+" / "+selected.length;btn.append(title,info);btn.addEventListener("click",()=>{stackPicked=i;currentCase=i;renderPainList();renderPainDetail();syncTopic();stackResults();});result.appendChild(btn)}
+ const best=ranked[0];if(best&&!ranked.some(x=>x.i===stackPicked)){stackPicked=best.i}
+}
+document.getElementById("stackClear").addEventListener("click",()=>{stackSet.clear();stackResults()});
+document.getElementById("stackAction").addEventListener("click",()=>{const cat=cases[stackPicked];demoScenario=cat?.id==="docs"||cat?.id==="finance"?1:cat?.id==="planning"||cat?.id==="projects"?2:0;demoRender();demoRun()});
 
 ui.year.textContent = new Date().getFullYear();
 applyLanguage(detectLang());
