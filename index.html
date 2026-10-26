@@ -178,7 +178,29 @@ textarea{min-height:120px;resize:vertical}
 .demo-caution{font-size:12px!important;color:#8ea5b8!important}
 @media(max-width:940px){.demo-shell{grid-template-columns:1fr}.messenger{max-width:650px}}
 @media(max-width:600px){.msg-stream{height:400px}.msg-bottom{align-items:start;flex-direction:column}.bubble{max-width:95%}}
-.icon-holder{display:inline-flex;align-items:center;justify-content:center;position:relative;width:20px;height:20px;flex-shrink:0}.icon-holder img{width:18px;height:18px;object-fit:contain;display:block}.icon-holder .icon-fallback{display:none;font:900 12px system-ui,sans-serif;color:#a5f6d6}.icon-holder.show-fallback .icon-fallback{display:block}.orbit-badge .icon-holder{width:20px;height:20px}.logo-pill .icon-holder{width:20px;height:20px}</style>
+.icon-holder{display:inline-flex;align-items:center;justify-content:center;position:relative;width:20px;height:20px;flex-shrink:0}.icon-holder img{width:18px;height:18px;object-fit:contain;display:block}.icon-holder .icon-fallback{display:none;font:900 12px system-ui,sans-serif;color:#a5f6d6}.icon-holder.show-fallback .icon-fallback{display:block}.orbit-badge .icon-holder{width:20px;height:20px}.logo-pill .icon-holder{width:20px;height:20px}
+.telegram-demo{background:#0e1621;border-color:#2d445a;box-shadow:0 40px 115px #000b}
+.telegram-demo .msg-head{background:#17212b;min-height:68px;padding:10px 15px;gap:11px;border-bottom-color:#ffffff12}
+.telegram-demo .msg-avatar{height:43px;width:43px;border-radius:50%;background:linear-gradient(140deg,#2196cf,#5bcbff);color:white;font-size:23px;box-shadow:none}
+.tg-back{font-size:30px;color:#87a3b8;line-height:1}.tg-peer{flex:1;min-width:0}.tg-peer b{font-size:14px}.tg-peer small{color:#70bde6;font-size:12px}
+.tg-demo-chip{display:inline-flex;font-size:9px;letter-spacing:.07em;font-weight:900;padding:3px 5px;border-radius:5px;background:#294962;color:#aee7ff;vertical-align:middle}
+.tg-top-icons{display:flex;gap:18px;align-items:center;font-size:24px;color:#87a2b8}
+.telegram-demo .msg-stream{height:440px;padding:20px 17px;background-color:#0e1621;background-image:radial-gradient(#81acbb12 1px,transparent 1px),radial-gradient(ellipse at 80% 20%,#2b597238,transparent 60%);background-size:28px 28px,auto;gap:10px}
+.telegram-demo .bubble{max-width:86%;position:relative;padding:10px 12px 8px;border-radius:13px;font-size:13px;line-height:1.55;box-shadow:0 2px 6px #0004;white-space:pre-line}
+.telegram-demo .bubble.user{background:#2b5278;border-bottom-right-radius:3px}
+.telegram-demo .bubble.agent{background:#182533;border-bottom-left-radius:3px}
+.telegram-demo .bubble.result{background:#183d36;border:1px solid #5ad7a977}
+.telegram-demo .bubble small{font-size:10px;text-align:right;margin-top:5px;color:#a0b4c7}
+.telegram-demo .bubble.user small{color:#8cd8ff}
+.telegram-demo .bubble.result .tg-done{display:flex;gap:9px;align-items:center;font-weight:850;color:#adf6d3;letter-spacing:.025em;padding-bottom:7px;border-bottom:1px solid #ffffff18;margin-bottom:8px}
+.telegram-demo .bubble.result .tg-result-action{margin-top:10px;border-top:1px solid #ffffff1e;padding-top:9px;color:#9ddaff;font-weight:750}
+.telegram-demo .typing{border-radius:12px;background:#182533;padding:13px 16px}
+.tg-compose{display:flex;gap:12px;align-items:center;padding:10px 14px;background:#17212b;border-top:1px solid #ffffff18;min-height:57px}
+.tg-tool{font-size:24px;color:#8299ac}.tg-input{flex:1;color:#879bad;font-size:13px}.tg-send{width:38px;height:38px;border:0;border-radius:50%;background:#2ca5df;color:white;font-size:18px;display:grid;place-items:center}
+.tg-send:disabled{opacity:.5;cursor:wait}
+.tg-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;background:#17212b;padding:4px 14px 10px;font-size:11px;color:#9eb1c3}
+.tg-foot button{border:1px solid #ffffff25;background:transparent;border-radius:8px;color:#bce8ff;padding:4px 10px}
+</style>
 </head>
 <body>
 <header class="topbar">
@@ -262,10 +284,16 @@ textarea{min-height:120px;resize:vertical}
    </div>
    <p class="demo-caution" id="demoDisclaimer">Interactive simulation with example data. No real messages, tasks or payments are sent.</p>
   </div>
-  <div class="messenger" aria-label="Illustrative autonomous agent messenger conversation">
-   <div class="msg-head"><div class="msg-avatar">✳</div><div><b>AUTONOMOUS / AGENT</b><small id="demoPresence">Demo environment · online</small></div><span class="online"></span></div>
+  <div class="messenger telegram-demo" aria-label="Simulated Telegram-style agent conversation">
+   <div class="msg-head">
+    <span class="tg-back" aria-hidden="true">‹</span>
+    <div class="msg-avatar">✳</div>
+    <div class="tg-peer"><b>Autonomous Agent <span class="tg-demo-chip">DEMO</span></b><small id="demoPresence">Demo environment · online</small></div>
+    <span class="tg-top-icons" aria-hidden="true"><span>⌕</span><span>⋮</span></span>
+   </div>
    <div class="msg-stream" id="demoStream" aria-live="polite" aria-relevant="additions"></div>
-   <div class="msg-bottom"><span id="demoStatus">Ready to run a simulated workflow</span><button type="button" id="demoReplay">▶ Run demo</button></div>
+   <div class="tg-compose"><span class="tg-tool" aria-hidden="true">☺</span><span class="tg-input" id="demoInputHint">Message</span><span class="tg-tool" aria-hidden="true">⌁</span><button type="button" id="demoReplay" class="tg-send" aria-label="Run demo">➤</button></div>
+   <div class="tg-foot"><span id="demoStatus">Ready to run a simulated workflow</span><button type="button" id="demoNext">↻</button></div>
   </div>
  </div>
 </section>
@@ -782,16 +810,17 @@ uk:{eyebrow:"ПОДИВІТЬСЯ, ЯК ПРАЦЮЄ АГЕНТ",title:'Одне
 ["Розбери протокол зустрічі й простеж, щоб ми не забули терміни.","Читаю демонстраційні нотатки зустрічі…","Виділяю рішення, відповідальних і дати…","Готую завдання й розклад нагадувань…","✓ Підготовлено 4 завдання\n✓ Призначено 3 відповідальних\n✓ У демо заплановано 2 нагадування\nКонтрольний список готовий."]
 ]}
 };
-let demoScenario=0,demoToken=0,demoTimers=[];
-const demoStream=document.getElementById("demoStream"),demoStatus=document.getElementById("demoStatus"),demoReplay=document.getElementById("demoReplay");
+
+let demoScenario=0,demoTimers=[];
+const demoStream=document.getElementById("demoStream"),demoStatus=document.getElementById("demoStatus"),demoReplay=document.getElementById("demoReplay"),demoNext=document.getElementById("demoNext");
 function demoCopy(){return demoI18n[currentLang]||demoI18n.en}
-function demoReset(){demoToken++;demoTimers.forEach(clearTimeout);demoTimers=[];demoStream.replaceChildren();const d=demoCopy();demoStatus.textContent=d.status;demoReplay.disabled=false;demoReplay.textContent=d.play}
-function demoBubble(message,user=false,result=false){const d=demoCopy();const b=document.createElement("div");b.className="bubble "+(user?"user":result?"agent result":"agent");const content=document.createElement("span");content.textContent=message;b.appendChild(content);const caption=document.createElement("small");caption.textContent=result?d.doneLabel:(user?d.who:d.agent);b.appendChild(caption);demoStream.appendChild(b);demoStream.scrollTop=demoStream.scrollHeight}
-function demoTyping(){const b=document.createElement("div");b.className="typing";b.setAttribute("aria-label","Typing");b.innerHTML="<i></i><i></i><i></i>";demoStream.appendChild(b);demoStream.scrollTop=demoStream.scrollHeight;return b}
-function demoRun(){demoReset();const d=demoCopy(),steps=d.scenarios[demoScenario];demoReplay.disabled=true;demoStatus.textContent=d.running;demoBubble(steps[0],true);let time=400;for(let i=1;i<steps.length;i++){const delay=time;demoTimers.push(setTimeout(()=>{const indicator=demoTyping();demoTimers.push(setTimeout(()=>{indicator.remove();demoBubble(steps[i],false,i===steps.length-1);if(i===steps.length-1){demoStatus.textContent=d.done;demoReplay.disabled=false;demoReplay.textContent=d.replay}},850))},delay));time+=1500}}
-function demoRender(){const d=demoCopy();document.getElementById("demoEyebrow").textContent=d.eyebrow;document.getElementById("demoTitle").innerHTML=d.title;document.getElementById("demoDescription").textContent=d.description;document.getElementById("demoDisclaimer").textContent=d.disclaimer;document.getElementById("demoPresence").textContent=d.presence;document.querySelectorAll("#demoCases button").forEach((b,i)=>{b.textContent=d.labels[i];b.setAttribute("aria-pressed",String(i===demoScenario))});demoReset();demoBubble(d.scenarios[demoScenario][0],true)}
-document.querySelectorAll("#demoCases button").forEach(b=>b.addEventListener("click",()=>{demoScenario=Number(b.dataset.demo);demoRender();demoRun()}));
-demoReplay.addEventListener("click",demoRun);
+function demoStop(){demoTimers.forEach(clearTimeout);demoTimers=[];demoStream.replaceChildren();const d=demoCopy();demoStatus.textContent=d.status;demoReplay.disabled=false;demoReplay.textContent="➤"}
+function demoBubble(message,user=false,result=false){const d=demoCopy();const b=document.createElement("div");b.className="bubble "+(user?"user":result?"agent result":"agent");if(result){const header=document.createElement("div");header.className="tg-done";header.textContent=d.doneLabel;b.appendChild(header)}const content=document.createElement("span");content.textContent=message;b.appendChild(content);if(result){const link=document.createElement("div");link.className="tg-result-action";link.textContent=d.replay+" ↻";b.appendChild(link)}const caption=document.createElement("small");const dt=new Date();const tm=dt.toLocaleTimeString(currentLang==="uk"?"uk-UA":currentLang==="ru"?"ru-RU":"en-GB",{hour:"2-digit",minute:"2-digit"});caption.textContent=tm+(user?" ✓✓":"");b.appendChild(caption);demoStream.appendChild(b);demoStream.scrollTop=demoStream.scrollHeight}
+function demoTyping(){const b=document.createElement("div");b.className="typing";b.setAttribute("aria-label","Typing");b.innerHTML="<i></i><i></i><i></i>";demoStream.appendChild(b);demoStream.scrollTop=demoStream.scrollHeight;document.getElementById("demoPresence").textContent=currentLang==="ru"?"печатает…":currentLang==="uk"?"друкує…":"typing…";return b}
+function demoRun(){demoStop();const d=demoCopy(),steps=d.scenarios[demoScenario];demoReplay.disabled=true;demoStatus.textContent=d.running;demoBubble(steps[0],true);let time=350;for(let i=1;i<steps.length;i++){const delay=time;demoTimers.push(setTimeout(()=>{const indicator=demoTyping();demoTimers.push(setTimeout(()=>{indicator.remove();demoBubble(steps[i],false,i===steps.length-1);document.getElementById("demoPresence").textContent=d.presence;if(i===steps.length-1){demoStatus.textContent=d.done;demoReplay.disabled=false}},800))},delay));time+=1450}}
+function demoRender(){const d=demoCopy();document.getElementById("demoEyebrow").textContent=d.eyebrow;document.getElementById("demoTitle").innerHTML=d.title;document.getElementById("demoDescription").textContent=d.description;document.getElementById("demoDisclaimer").textContent=d.disclaimer;document.getElementById("demoPresence").textContent=d.presence;document.getElementById("demoInputHint").textContent=currentLang==="ru"?"Сообщение":currentLang==="uk"?"Повідомлення":"Message";document.querySelectorAll("#demoCases button").forEach((b,i)=>{b.textContent=d.labels[i];b.setAttribute("aria-pressed",String(i===demoScenario))});demoStop();demoBubble(d.scenarios[demoScenario][0],true)}
+document.querySelectorAll("#demoCases button").forEach(b=>b.addEventListener("click",()=>{demoScenario=Number(b.dataset.demo);demoRun()}));
+demoReplay.addEventListener("click",demoRun);demoNext.addEventListener("click",()=>{demoScenario=(demoScenario+1)%3;demoRender();demoRun()});
 
 ui.year.textContent = new Date().getFullYear();
 applyLanguage(detectLang());
