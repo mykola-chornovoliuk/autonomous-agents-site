@@ -178,7 +178,7 @@ textarea{min-height:120px;resize:vertical}
 .demo-caution{font-size:12px!important;color:#8ea5b8!important}
 @media(max-width:940px){.demo-shell{grid-template-columns:1fr}.messenger{max-width:650px}}
 @media(max-width:600px){.msg-stream{height:400px}.msg-bottom{align-items:start;flex-direction:column}.bubble{max-width:95%}}
-</style>
+.icon-holder{display:inline-flex;align-items:center;justify-content:center;position:relative;width:20px;height:20px;flex-shrink:0}.icon-holder img{width:18px;height:18px;object-fit:contain;display:block}.icon-holder .icon-fallback{display:none;font:900 12px system-ui,sans-serif;color:#a5f6d6}.icon-holder.show-fallback .icon-fallback{display:block}.orbit-badge .icon-holder{width:20px;height:20px}.logo-pill .icon-holder{width:20px;height:20px}</style>
 </head>
 <body>
 <header class="topbar">
@@ -228,13 +228,13 @@ textarea{min-height:120px;resize:vertical}
           </div>
         </div>
 
-        <div class="orbit-badge floaty" style="top:72px;left:42px"><img alt="Gmail" src="https://cdn.simpleicons.org/gmail/EA4335"><span>Gmail</span></div>
-        <div class="orbit-badge floaty delay" style="top:130px;right:54px"><img alt="Slack" src="https://cdn.simpleicons.org/slack/4A154B"><span>Slack</span></div>
-        <div class="orbit-badge floaty delay2" style="top:238px;left:6px"><img alt="Google Calendar" src="https://cdn.simpleicons.org/googlecalendar/4285F4"><span>Calendar</span></div>
-        <div class="orbit-badge floaty" style="top:264px;right:8px"><img alt="HubSpot" src="https://cdn.simpleicons.org/hubspot/FF7A59"><span>HubSpot</span></div>
-        <div class="orbit-badge floaty delay" style="bottom:166px;left:38px"><img alt="Google Drive" src="https://cdn.simpleicons.org/googledrive/34A853"><span>Drive</span></div>
-        <div class="orbit-badge floaty delay2" style="bottom:96px;right:46px"><img alt="Airtable" src="https://cdn.simpleicons.org/airtable/18BFFF"><span>Airtable</span></div>
-        <div class="orbit-badge floaty" style="bottom:30px;left:140px"><img alt="Microsoft Excel" src="https://cdn.simpleicons.org/microsoftexcel/217346"><span>Excel</span></div>
+        <div class="orbit-badge floaty" style="top:72px;left:42px"><span class="icon-holder"><img alt="" data-service="gmail" src="https://cdn.simpleicons.org/gmail/EA4335"><span class="icon-fallback" aria-hidden="true">G</span></span><span>Gmail</span></div>
+        <div class="orbit-badge floaty delay" style="top:130px;right:54px"><span class="icon-holder"><img alt="" data-service="slack" src="https://cdn.simpleicons.org/slack/4A154B"><span class="icon-fallback" aria-hidden="true">S</span></span><span>Slack</span></div>
+        <div class="orbit-badge floaty delay2" style="top:238px;left:6px"><span class="icon-holder"><img alt="" data-service="googlecalendar" src="https://cdn.simpleicons.org/googlecalendar/4285F4"><span class="icon-fallback" aria-hidden="true">G</span></span><span>Calendar</span></div>
+        <div class="orbit-badge floaty" style="top:264px;right:8px"><span class="icon-holder"><img alt="" data-service="hubspot" src="https://cdn.simpleicons.org/hubspot/FF7A59"><span class="icon-fallback" aria-hidden="true">H</span></span><span>HubSpot</span></div>
+        <div class="orbit-badge floaty delay" style="bottom:166px;left:38px"><span class="icon-holder"><img alt="" data-service="googledrive" src="https://cdn.simpleicons.org/googledrive/34A853"><span class="icon-fallback" aria-hidden="true">G</span></span><span>Drive</span></div>
+        <div class="orbit-badge floaty delay2" style="bottom:96px;right:46px"><span class="icon-holder"><img alt="" data-service="airtable" src="https://cdn.simpleicons.org/airtable/18BFFF"><span class="icon-fallback" aria-hidden="true">A</span></span><span>Airtable</span></div>
+        <div class="orbit-badge floaty" style="bottom:30px;left:140px"><span class="icon-holder"><img alt="" data-service="microsoftexcel" src="https://cdn.simpleicons.org/microsoftexcel/217346"><span class="icon-fallback" aria-hidden="true">M</span></span><span>Excel</span></div>
 
         <div class="badge-note" style="top:34px;right:22px">
           <b data-i18n="note1Title">The hidden cost</b>
@@ -622,6 +622,12 @@ let currentCase = 0;
 
 const serviceIcon = (slug,color='fff') => `https://cdn.simpleicons.org/${slug}/${color}`;
 
+const iconDomains={"gmail":"mail.google.com","microsoftoutlook":"outlook.live.com","slack":"slack.com","telegram":"telegram.org","whatsapp":"whatsapp.com","googlecalendar":"calendar.google.com","notion":"notion.so","trello":"trello.com","jira":"atlassian.com","asana":"asana.com","googledrive":"drive.google.com","googledocs":"docs.google.com","dropbox":"dropbox.com","microsoftonedrive":"onedrive.live.com","docusign":"docusign.com","googlesheets":"sheets.google.com","microsoftexcel":"microsoft.com","airtable":"airtable.com","hubspot":"hubspot.com","salesforce":"salesforce.com","pipedrive":"pipedrive.com","clickup":"clickup.com","mondaydotcom":"monday.com","linear":"linear.app","stripe":"stripe.com","paypal":"paypal.com","shopify":"shopify.com"};
+function serviceImg(slug,name,color='ffffff'){const safe=String(name).replace(/[&<>"']/g,'');return '<span class="icon-holder"><img loading="lazy" alt="" data-service="'+slug+'" src="'+serviceIcon(slug,color)+'"><span class="icon-fallback" aria-hidden="true">'+safe.slice(0,1)+'</span></span>'}
+function iconFallback(img){if(!img||img.dataset.fallbackDone)return;const slug=img.dataset.service;const domain=iconDomains[slug];if(img.dataset.tryFavicon!=='yes'&&domain){img.dataset.tryFavicon='yes';img.src='https://www.google.com/s2/favicons?domain='+encodeURIComponent(domain)+'&sz=64'}else{img.dataset.fallbackDone='yes';img.style.display='none';img.parentElement.classList.add('show-fallback')}}
+document.addEventListener('error',function(e){if(e.target instanceof HTMLImageElement&&e.target.closest('.icon-holder'))iconFallback(e.target)},true);
+
+
 function detectLang(){
   try{
     const saved = localStorage.getItem('site-language');
@@ -656,13 +662,13 @@ function renderServiceGroups(){
       <h3>${t[currentLang].groupTitles[group.key]}</h3>
       <p>${t[currentLang].groupDescs[group.key]}</p>
       <div class="icon-grid">
-        ${group.services.map(service=>`<span class="logo-pill"><img loading="lazy" alt="${service.name}" src="${serviceIcon(service.slug,service.color)}"><span>${service.name}</span></span>`).join('')}
+        ${group.services.map(service=>`<span class="logo-pill">${serviceImg(service.slug,service.name,service.color)}<span>${service.name}</span></span>`).join('')}
       </div>
     </article>
   `).join('');
 
   const allServices = serviceGroups.flatMap(g=>g.services);
-  const repeated = [...allServices, ...allServices].map(service=>`<span class="logo-pill"><img loading="lazy" alt="${service.name}" src="${serviceIcon(service.slug,service.color)}"><span>${service.name}</span></span>`).join('');
+  const repeated = [...allServices, ...allServices].map(service=>`<span class="logo-pill">${serviceImg(service.slug,service.name,service.color)}<span>${service.name}</span></span>`).join('');
   ui.logoTrack.innerHTML = repeated;
 }
 
@@ -692,7 +698,7 @@ function renderPainDetail(){
       <div class="pain-card"><span>${t[currentLang].detailPain}</span><b>${item.titles[currentLang]}</b><p>${item.pain[currentLang]}</p></div>
       <div class="pain-card"><span>${t[currentLang].detailAgent}</span><b>${item.icon} / ${t[currentLang].detailAction}</b><p>${item.solve[currentLang]}</p></div>
       <div class="pain-card"><span>${t[currentLang].detailOutput}</span><b>${t[currentLang].detailOutcome}</b><p>${item.output[currentLang]}</p></div>
-      <div class="pain-card"><span>${t[currentLang].detailTools}</span><div class="service-strip">${item.services.map(slug=>{const s=serviceMap.get(slug); return `<span class="logo-pill"><img loading="lazy" alt="${s.name}" src="${serviceIcon(s.slug,s.color)}"><span>${s.name}</span></span>`}).join('')}</div></div>
+      <div class="pain-card"><span>${t[currentLang].detailTools}</span><div class="service-strip">${item.services.map(slug=>{const s=serviceMap.get(slug); return `<span class="logo-pill">${serviceImg(s.slug,s.name,s.color)}<span>${s.name}</span></span>`}).join('')}</div></div>
     </div>
   `;
 }
