@@ -29,3 +29,10 @@ A clean publication series started on 2026-10-26.
 - Working proposal form prepares an email to the project owner; no backend submission or public listings are claimed.
 - Published on https://grotexcat.com
 - Commit: 7543cab57dcf2ef1fff6c7255e9337303067846f
+
+## Experiment 005 — Literary space (2026-10-27)
+- Reimagined root website as a quiet, layered space for human encounters and exchange.
+- Three entry paths, literary fragments, soft glass/cloth-like CSS atmosphere, and a minimal letter form.
+- No fabricated user listings or claims of an active marketplace; email is user-confirmed mailto.
+- Production: https://grotexcat.com
+- Commit: fcce263eee35717e58a5a0dc4843ad2072ee154b
