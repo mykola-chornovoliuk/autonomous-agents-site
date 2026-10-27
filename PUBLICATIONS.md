@@ -22,3 +22,10 @@ A clean publication series started on 2026-10-26.
 - Number new production releases sequentially: 002, 003, 004, ...
 - Each published release gets a short summary, date, and commit SHA.
 - Previous Git commit history remains available as an archive; this log marks a new publication series, not a rewrite of Git history.
+
+## Experiment 003 — ЗА ЧТО? (2026-10-27)
+- Replaced the root test website with a new concept about exchanging human skills, time and experience.
+- Two paths: offer help / request help; example ideas are explicitly illustrative.
+- Working proposal form prepares an email to the project owner; no backend submission or public listings are claimed.
+- Published on https://grotexcat.com
+- Commit: 7543cab57dcf2ef1fff6c7255e9337303067846f
